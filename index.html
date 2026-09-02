@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>業務トピックス・共有情報_入力フォーム</title>
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22%E3%83%88%E3%83%94%E3%83%83%E3%82%AF%E5%A0%B1%E5%91%8A%22,%22short_name%22:%22%E5%A0%B1%E5%91%8A%22,%22display%22:%22standalone%22,%22start_url%22:%22.%22,%22background_color%22:%22%23F4F5F7%22,%22theme_color%22:%22%23223148%22}">
+<link rel="icon" sizes="any" href="favicon.ico" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{
+    --ink:#1C2733;
+    --ink-soft:#5B6673;
+    --paper:#F4F5F7;
+    --card:#FFFFFF;
+    --line:#E2E5E9;
+    --navy:#223148;
+    --navy-deep:#16202E;
+    --teal:#3E7C7A;
+    --teal-soft:#E6F1F0;
+    --amber:#DD9A3A;
+    --amber-soft:#FBF0DE;
+    --danger:#B3483F;
+    --radius:14px;
+    --shadow: 0 1px 2px rgba(28,39,51,0.06), 0 6px 20px rgba(28,39,51,0.06);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+    line-height:1.5;
+    min-height:100vh;
+    padding-bottom:110px;
+  }
+  header.top{
+    background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);
+    color:#fff;
+    padding:26px 20px 18px;
+    border-radius:0 0 22px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:160px;height:160px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.05);
+  }
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:.12em;
+    color:rgba(255,255,255,0.65);
+    text-transform:uppercase;
+    margin:0 0 6px;
+    font-weight:600;
+  }
+  h1{
+    margin:0;
+    font-size:23px;
+    font-weight:700;
+    letter-spacing:.01em;
+  }
+  .today{
+    margin-top:10px;
+    font-size:13.5px;
+    color:rgba(255,255,255,0.8);
+  }
+
+  /* タブ切り替え */
+  .tabbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    gap:6px;
+    margin-top:18px;
+    background:rgba(255,255,255,0.1);
+    padding:5px;
+    border-radius:12px;
+  }
+  .tabbar button{
+    flex:1;
+    border:none;
+    background:transparent;
+    color:rgba(255,255,255,0.75);
+    font-size:13.5px;
+    font-weight:700;
+    padding:10px 6px;
+    border-radius:9px;
+    cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .tabbar button.active{
+    background:#fff;
+    color:var(--navy-deep);
+  }
+
+  main{
+    max-width:min(96vw, 1100px);
+    margin:0 auto;
+    padding:18px 16px 0;
+  }
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px 16px;
+    margin-bottom:14px;
+  }
+
+  .field{margin-bottom:16px;}
+  .field:last-child{margin-bottom:0;}
+  label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin-bottom:7px;
+  }
+  label .required{
+    color:var(--danger);
+    font-size:11px;
+    font-weight:700;
+    background:rgba(179,72,63,0.08);
+    padding:1px 6px;
+    border-radius:20px;
+  }
+  input[type=text], input[type=date], input[type=search], select, textarea{
+    width:100%;
+    font-size:16px;
+    padding:12px 13px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:#FCFCFD;
+    color:var(--ink);
+    font-family:inherit;
+    transition:border-color .15s, background .15s;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--teal);
+    background:#fff;
+  }
+  select{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%235B6673' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:36px;
+  }
+  textarea{
+    min-height:140px;
+    resize:vertical;
+    line-height:1.6;
+  }
+  .hint{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+
+  .section-title{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--teal);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin:0 0 12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .section-title::before{
+    content:"";
+    width:4px;height:14px;
+    background:var(--teal);
+    border-radius:2px;
+    display:inline-block;
+  }
+
+  .mic-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:8px;
+  }
+  .mic-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    border:1.5px solid var(--amber);
+    background:var(--amber-soft);
+    color:#8A5A16;
+    font-size:13px;
+    font-weight:700;
+    padding:9px 15px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:transform .12s, box-shadow .12s;
+  }
+  .mic-btn:active{transform:scale(0.97);}
+  .mic-btn.recording{
+    background:var(--danger);
+    border-color:var(--danger);
+    color:#fff;
+    animation:pulse 1.4s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(179,72,63,0.35);}
+    70%{box-shadow:0 0 0 10px rgba(179,72,63,0);}
+    100%{box-shadow:0 0 0 0 rgba(179,72,63,0);}
+  }
+  .mic-btn svg{width:15px;height:15px;flex:none;}
+  .mic-fallback{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:8px;
+    line-height:1.55;
+  }
+
+  /* ---- 添付ファイル ---- */
+  .file-drop{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:1.5px dashed var(--line);
+    border-radius:10px;
+    padding:18px 12px;
+    color:var(--ink-soft);
+    font-size:13px;
+    font-weight:600;
+    text-align:center;
+    cursor:pointer;
+    background:#FCFCFD;
+    transition:border-color .15s, background .15s;
+  }
+  .file-drop:active{
+    border-color:var(--teal);
+    background:var(--teal-soft);
+  }
+  .file-drop svg{width:18px;height:18px;flex:none;color:var(--ink-soft);}
+  .file-drop.drag-over{
+    border-color:var(--teal);
+    background:var(--teal-soft);
+    color:#215350;
+  }
+  .file-chip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1.5px solid var(--line);
+    background:#FCFCFD;
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:8px;
+  }
+  .file-chip svg{width:18px;height:18px;flex:none;color:var(--teal);}
+  .file-chip-name{
+    flex:1;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .file-chip-remove{
+    flex:none;
+    border:none;
+    background:var(--line);
+    color:var(--ink-soft);
+    width:24px;height:24px;
+    border-radius:50%;
+    font-size:12px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .attachment-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:11px;
+    font-weight:700;
+    padding:2px 9px;
+    border-radius:20px;
+    background:var(--amber-soft);
+    color:#8A5A16;
+    white-space:nowrap;
+    text-decoration:none;
+  }
+  .attachment-badge svg{width:11px;height:11px;flex:none;}
+
+  /* ---- 複数添付ファイル一覧 ---- */
+  .attach-list{ margin-bottom:8px; }
+  .attach-list:empty{ margin-bottom:0; }
+  .attach-limit-note{
+    font-size:12px;
+    color:var(--ink-soft);
+    text-align:center;
+    padding:10px;
+    background:#F4F5F7;
+    border-radius:10px;
+    margin-bottom:8px;
+  }
+
+  /* ---- 関連する過去の報告：検索・選択 ---- */
+  #relatedSearchInput, #editRelatedSearchInput{
+    font-size:16px;
+    padding:12px 13px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:#FCFCFD;
+    color:var(--ink);
+    font-family:inherit;
+  }
+  #relatedSearchInput:focus, #editRelatedSearchInput:focus{
+    outline:none;
+    border-color:var(--teal);
+    background:#fff;
+  }
+  .related-result-list{ margin-top:10px; }
+  .related-result-item{
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:8px;
+    cursor:pointer;
+    background:#FCFCFD;
+  }
+  .related-result-item:active{ background:var(--teal-soft); }
+  .related-result-item .r-date{
+    font-size:11px; font-weight:700; color:var(--navy);
+  }
+  .related-result-item .r-company{
+    font-size:13.5px; font-weight:700; color:var(--ink); margin:2px 0;
+  }
+  .related-result-item .r-content{
+    font-size:12px; color:var(--ink-soft);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .related-empty{
+    font-size:12.5px; color:var(--ink-soft); text-align:center; padding:12px;
+  }
+  .related-selected-chip{
+    display:flex; align-items:flex-start; gap:8px;
+    border:1.5px solid var(--teal);
+    background:var(--teal-soft);
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:8px;
+  }
+  .related-selected-chip svg{ width:16px; height:16px; flex:none; color:#215350; margin-top:2px; }
+  .related-selected-chip .r-body{ flex:1; }
+  .related-selected-chip .r-date{ font-size:11px; font-weight:700; color:#215350; }
+  .related-selected-chip .r-company{ font-size:13.5px; font-weight:700; color:var(--ink); margin:1px 0 0; }
+  .related-selected-chip .r-open{
+    font-size:11.5px; color:#215350; text-decoration:underline; font-weight:700;
+    background:none; border:none; padding:2px 0; margin-top:3px; cursor:pointer;
+  }
+
+  .relation-line{
+    display:flex; align-items:center; gap:5px;
+    font-size:11.5px; color:var(--teal);
+    font-weight:700;
+    margin:0 0 6px;
+    background:none; border:none; padding:0; cursor:pointer;
+  }
+  .relation-line svg{ width:12px; height:12px; flex:none; }
+
+  footer.bar{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    background:rgba(244,245,247,0.92);
+    backdrop-filter:blur(8px);
+    border-top:1px solid var(--line);
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    z-index:30;
+  }
+  .bar-inner{max-width:min(96vw, 1100px);margin:0 auto;}
+  button.submit{
+    width:100%;
+    background:var(--navy);
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    border:none;
+    padding:15px;
+    border-radius:12px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:background .15s, transform .1s;
+  }
+  button.submit:active{transform:scale(0.985);}
+  button.submit:disabled{background:#8992A0;cursor:default;}
+  .spinner{
+    width:16px;height:16px;
+    border:2px solid rgba(255,255,255,0.4);
+    border-top-color:#fff;
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+    display:none;
+  }
+  button.submit.loading .spinner{display:inline-block;}
+  button.submit.loading .label{display:none;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .toast{
+    position:fixed;
+    left:16px; right:16px;
+    bottom:96px;
+    max-width:528px;
+    margin:0 auto;
+    background:var(--navy-deep);
+    color:#fff;
+    padding:13px 16px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.2);
+    transform:translateY(20px);
+    opacity:0;
+    pointer-events:none;
+    transition:transform .25s, opacity .25s;
+    z-index:80;
+  }
+  .toast.show{transform:translateY(0);opacity:1;}
+  .toast.error{background:var(--danger);}
+
+  .config-warning{
+    background:var(--amber-soft);
+    border:1px solid var(--amber);
+    color:#7A4E14;
+    font-size:12.5px;
+    padding:10px 13px;
+    border-radius:10px;
+    margin:14px 16px 0;
+    line-height:1.6;
+  }
+
+  /* ---- 履歴・検索 ---- */
+  .search-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .search-grid .field.full{grid-column:1 / -1;}
+  .search-actions{
+    display:flex;
+    gap:10px;
+    margin-top:4px;
+  }
+  .btn-secondary{
+    flex:1;
+    background:#fff;
+    border:1.5px solid var(--line);
+    color:var(--ink-soft);
+    font-size:13.5px;
+    font-weight:700;
+    padding:11px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+  .btn-primary-outline{
+    flex:1;
+    background:var(--teal-soft);
+    border:1.5px solid var(--teal);
+    color:#215350;
+    font-size:13.5px;
+    font-weight:700;
+    padding:11px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+
+  .result-count{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin:0 2px 10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .result-count button{
+    border:none;
+    background:none;
+    color:var(--teal);
+    font-weight:700;
+    font-size:12.5px;
+    cursor:pointer;
+    padding:4px 6px;
+  }
+
+  .report-item{
+    background:var(--card);
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    padding:14px 15px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:transform .1s;
+  }
+  .report-item:active{transform:scale(0.99);}
+  .report-item .row1{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .report-item .date{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .badge{
+    font-size:11px;
+    font-weight:700;
+    padding:2px 9px;
+    border-radius:20px;
+    background:var(--teal-soft);
+    color:#215350;
+    white-space:nowrap;
+  }
+  .report-item .company{
+    font-size:15px;
+    font-weight:700;
+    color:var(--ink);
+    margin:0 0 2px;
+  }
+  .report-item .meta{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin:0 0 6px;
+  }
+  .report-item .content-preview{
+    font-size:13px;
+    color:var(--ink-soft);
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+  }
+  .content-preview .content-link{
+    color:var(--teal);
+    font-weight:600;
+    text-decoration:underline;
+  }
+
+  .empty-state{
+    text-align:center;
+    padding:46px 20px;
+    color:var(--ink-soft);
+  }
+  .empty-state .big{font-size:34px;margin-bottom:10px;}
+  .empty-state p{font-size:13.5px;margin:4px 0 0;}
+
+  .skeleton{
+    height:78px;
+    border-radius:12px;
+    background:linear-gradient(90deg,#EDEEF1 25%,#F6F7F8 37%,#EDEEF1 63%);
+    background-size:400% 100%;
+    animation:shimmer 1.4s ease infinite;
+    margin-bottom:10px;
+  }
+  @keyframes shimmer{0%{background-position:100% 0;}100%{background-position:0 0;}}
+
+  /* ---- 編集モーダル ---- */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(22,32,46,0.5);
+    z-index:60;
+    display:none;
+    align-items:flex-end;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-sheet{
+    background:var(--paper);
+    width:100%;
+    max-height:92vh;
+    overflow-y:auto;
+    border-radius:20px 20px 0 0;
+    padding:6px 16px calc(18px + env(safe-area-inset-bottom));
+    animation:slideUp .22s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(24px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+  .modal-handle{
+    width:36px;height:4px;
+    background:var(--line);
+    border-radius:3px;
+    margin:10px auto 14px;
+  }
+  .modal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .modal-header h2{
+    font-size:17px;
+    margin:0;
+    font-weight:700;
+  }
+  .modal-close{
+    border:none;
+    background:var(--line);
+    color:var(--ink-soft);
+    width:30px;height:30px;
+    border-radius:50%;
+    font-size:16px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-actions{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+  }
+  .modal-actions button.submit{margin:0;}
+  .danger-zone{
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px dashed var(--line);
+    display:flex;
+    justify-content:center;
+  }
+  .btn-danger-link{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background:none;
+    border:none;
+    color:var(--danger);
+    font-size:13px;
+    font-weight:700;
+    padding:8px 10px;
+    cursor:pointer;
+  }
+  .btn-danger-link svg{width:15px;height:15px;flex:none;}
+  .btn-danger-link:active{opacity:0.6;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="eyebrow">Field Report</p>
+  <h1>業務トピックス・共有情報_入力フォーム</h1>
+  <p class="today" id="todayLabel"></p>
+
+  <div class="tabbar">
+    <button type="button" class="active" id="tabCreateBtn" onclick="switchView('create')">新規報告</button>
+    <button type="button" id="tabHistoryBtn" onclick="switchView('history')">履歴を見る・編集</button>
+  </div>
+</header>
+
+<div class="config-warning" id="configWarning" style="display:none;">
+  ⚠️ 送信先が未設定です。<code>index.html</code> 内の <code>APPS_SCRIPT_URL</code> に、設置したGoogle Apps Script WebアプリのURLを入力してください（README.md 参照）。
+</div>
+
+<main>
+
+  <!-- ============ 新規報告 ============ -->
+  <section class="view active" id="createView">
+    <form id="reportForm">
+      <div class="card">
+        <p class="section-title">基本情報</p>
+        <div class="field">
+          <label for="date">報告日 <span class="required">必須</span></label>
+          <input type="date" id="date" name="date" required>
+        </div>
+        <div class="field">
+          <label for="reporter">報告者 <span class="required">必須</span></label>
+          <input type="text" id="reporter" name="reporter" list="reporterList" placeholder="例：濱崎" required autocomplete="off">
+          <datalist id="reporterList">
+            <option value="今村"><option value="濱崎"><option value="清水">
+            <option value="浅川"><option value="雨野"><option value="サミル">
+            <option value="従二"><option value="谷">
+          </datalist>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-title">相手先</p>
+        <div class="field">
+          <label for="customerType">顧客等種別 <span class="required">必須</span></label>
+          <select id="customerType" name="customerType" required>
+            <option value="" disabled selected>選択してください</option>
+            <option value="既会員法人">既会員法人</option>
+            <option value="新規法人">新規法人</option>
+            <option value="技能実習生">技能実習生</option>
+            <option value="特定技能外国人">特定技能外国人</option>
+            <option value="GPO 協力メーカー開発">GPO 協力メーカー開発</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="companyName">企業名等 <span class="required">必須</span></label>
+          <input type="text" id="companyName" name="companyName" placeholder="例：高原会" required autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="officeName">事業所名等</label>
+          <input type="text" id="officeName" name="officeName" placeholder="例：高原病院" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="contactPerson">相手方担当者</label>
+          <input type="text" id="contactPerson" name="contactPerson" placeholder="例：穴水常務理事" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-title">応対内容</p>
+        <div class="field">
+          <label for="method">応対等の方法 <span class="required">必須</span></label>
+          <select id="method" name="method" required>
+            <option value="" disabled selected>選択してください</option>
+            <option value="訪問">訪問</option>
+            <option value="電話">電話</option>
+            <option value="オンライン">オンライン</option>
+            <option value="メール・SNS">メール・SNS</option>
+            <option value="来社">来社</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="content">報告内容 <span class="required">必須</span></label>
+          <textarea id="content" name="content" placeholder="訪問・電話等の内容を入力してください。" required></textarea>
+          <div class="mic-row">
+            <button type="button" class="mic-btn" data-mic-target="content">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              <span class="mic-label">音声入力</span>
+            </button>
+          </div>
+          <p class="mic-fallback" data-mic-fallback></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-title">添付資料</p>
+        <div class="field" style="margin-bottom:0;">
+          <label>PDF等の資料（最大3点）</label>
+          <div class="attach-list" id="fileAttachList"></div>
+          <input type="file" id="file" name="file" accept="application/pdf,image/*" style="display:none;">
+          <div class="file-drop" id="fileDrop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span id="fileDropLabel">タップしてPDF等の資料を選択</span>
+          </div>
+          <p class="hint" id="fileDropHint">任意項目です。PDF・画像に対応、1点10MBまで、最大3点まで添付できます。</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-title">関連する過去の報告</p>
+        <div class="field" style="margin-bottom:0;">
+          <label>過去の報告を検索して関連付ける（任意）</label>
+          <div id="relatedSelected" style="display:none;"></div>
+          <div id="relatedSearchArea">
+            <div style="display:flex; gap:8px;">
+              <input type="search" id="relatedSearchInput" placeholder="企業名・担当者名などで検索" style="flex:1;">
+              <button type="button" class="btn-primary-outline" id="relatedSearchBtn" style="flex:none; padding:0 16px;">検索</button>
+            </div>
+            <div id="relatedSearchResults"></div>
+          </div>
+          <p class="hint">以前の報告の続き・関連する内容の場合、検索して選択しておくと経緯が追いやすくなります。</p>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============ 履歴・検索 ============ -->
+  <section class="view" id="historyView">
+    <div class="card">
+      <p class="section-title">検索条件</p>
+      <div class="search-grid">
+        <div class="field full">
+          <label for="q">キーワード</label>
+          <input type="search" id="q" placeholder="企業名・事業所名・担当者・報告内容など">
+        </div>
+        <div class="field">
+          <label for="fReporter">報告者</label>
+          <input type="text" id="fReporter" list="reporterList2" placeholder="すべて" autocomplete="off">
+          <datalist id="reporterList2">
+            <option value="今村"><option value="濱崎"><option value="清水">
+            <option value="浅川"><option value="雨野"><option value="サミル">
+            <option value="従二"><option value="谷">
+          </datalist>
+        </div>
+        <div class="field">
+          <label for="fCustomerType">顧客等種別</label>
+          <select id="fCustomerType">
+            <option value="">すべて</option>
+            <option value="既会員法人">既会員法人</option>
+            <option value="新規法人">新規法人</option>
+            <option value="技能実習生">技能実習生</option>
+            <option value="特定技能外国人">特定技能外国人</option>
+            <option value="GPO 協力メーカー開発">GPO 協力メーカー開発</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fMethod">応対方法</label>
+          <select id="fMethod">
+            <option value="">すべて</option>
+            <option value="訪問">訪問</option>
+            <option value="電話">電話</option>
+            <option value="オンライン">オンライン</option>
+            <option value="メール・SNS">メール・SNS</option>
+            <option value="来社">来社</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fFrom">期間（から）</label>
+          <input type="date" id="fFrom">
+        </div>
+        <div class="field">
+          <label for="fTo">期間（まで）</label>
+          <input type="date" id="fTo">
+        </div>
+      </div>
+      <div class="search-actions">
+        <button type="button" class="btn-secondary" id="clearFilterBtn">条件をクリア</button>
+        <button type="button" class="btn-primary-outline" id="refreshBtn">最新の状態に更新</button>
+      </div>
+    </div>
+
+    <p class="hint" style="margin:0 2px 10px;">※ 直近1か月分の報告を表示しています。それより前の報告は対象外です。</p>
+
+    <div id="resultCountWrap" class="result-count" style="display:none;">
+      <span id="resultCountLabel"></span>
+    </div>
+
+    <div id="historyList"></div>
+  </section>
+
+</main>
+
+<footer class="bar" id="submitBar">
+  <div class="bar-inner">
+    <button type="submit" form="reportForm" class="submit" id="submitBtn">
+      <span class="spinner"></span>
+      <span class="label">この内容で報告する</span>
+    </button>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ 編集モーダル ============ -->
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2>報告を編集</h2>
+      <button type="button" class="modal-close" id="editCloseBtn">✕</button>
+    </div>
+
+    <form id="editForm">
+      <input type="hidden" id="editRowNumber">
+
+      <div class="card">
+        <p class="section-title">基本情報</p>
+        <div class="field">
+          <label for="editDate">報告日 <span class="required">必須</span></label>
+          <input type="date" id="editDate" required>
+        </div>
+        <div class="field">
+          <label for="editReporter">報告者 <span class="required">必須</span></label>
+          <input type="text" id="editReporter" list="reporterList" required autocomplete="off">
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-title">相手先</p>
+        <div class="field">
+          <label for="editCustomerType">顧客等種別 <span class="required">必須</span></label>
+          <select id="editCustomerType" required>
+            <option value="" disabled>選択してください</option>
+            <option value="既会員法人">既会員法人</option>
+            <option value="新規法人">新規法人</option>
+            <option value="技能実習生">技能実習生</option>
+            <option value="特定技能外国人">特定技能外国人</option>
+            <option value="GPO 協力メーカー開発">GPO 協力メーカー開発</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="editCompanyName">企業名等 <span class="required">必須</span></label>
+          <input type="text" id="editCompanyName" required autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="editOfficeName">事業所名等</label>
+          <input type="text" id="editOfficeName" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="editContactPerson">相手方担当者</label>
+          <input type="text" id="editContactPerson" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-title">応対内容</p>
+        <div class="field">
+          <label for="editMethod">応対等の方法 <span class="required">必須</span></label>
+          <select id="editMethod" required>
+            <option value="" disabled>選択してください</option>
+            <option value="訪問">訪問</option>
+            <option value="電話">電話</option>
+            <option value="オンライン">オンライン</option>
+            <option value="メール・SNS">メール・SNS</option>
+            <option value="来社">来社</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="editContent">報告内容 <span class="required">必須</span></label>
+          <textarea id="editContent" required></textarea>
+          <div class="mic-row">
+            <button type="button" class="mic-btn" data-mic-target="editContent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              <span class="mic-label">音声入力</span>
+            </button>
+          </div>
+          <p class="mic-fallback" data-mic-fallback></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-title">添付資料</p>
+        <div class="field" style="margin-bottom:0;">
+          <label>PDF等の資料（最大3点）</label>
+          <div class="attach-list" id="editFileAttachList"></div>
+          <input type="file" id="editFile" name="editFile" accept="application/pdf,image/*" style="display:none;">
+          <div class="file-drop" id="editFileDrop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span id="editFileDropLabel">タップしてPDF等の資料を選択</span>
+          </div>
+          <p class="hint" id="editAttachmentHint">任意項目です。PDF・画像に対応、1点10MBまで、最大3点まで添付できます。</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-title">関連する過去の報告</p>
+        <div class="field" style="margin-bottom:0;">
+          <label>過去の報告を検索して関連付ける（任意）</label>
+          <div id="editRelatedSelected" style="display:none;"></div>
+          <div id="editRelatedSearchArea">
+            <div style="display:flex; gap:8px;">
+              <input type="search" id="editRelatedSearchInput" placeholder="企業名・担当者名などで検索" style="flex:1;">
+              <button type="button" class="btn-primary-outline" id="editRelatedSearchBtn" style="flex:none; padding:0 16px;">検索</button>
+            </div>
+            <div id="editRelatedSearchResults"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="editCancelBtn">キャンセル</button>
+        <button type="submit" class="submit" id="editSubmitBtn" style="flex:2;">
+          <span class="spinner"></span>
+          <span class="label">変更を保存する</span>
+        </button>
+      </div>
+
+      <div class="danger-zone">
+        <button type="button" class="btn-danger-link" id="editDeleteBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          この報告を削除する
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ 関連する報告のプレビュー ============ -->
+<div class="modal-overlay" id="relatedPreviewOverlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2>関連する報告</h2>
+      <button type="button" class="modal-close" id="relatedPreviewCloseBtn">✕</button>
+    </div>
+    <div id="relatedPreviewBody" style="padding-bottom:8px;"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" id="relatedPreviewCloseBtn2" style="flex:1;">閉じる</button>
+      <button type="button" class="submit" id="relatedPreviewEditBtn" style="flex:2;">この報告を編集する</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 確認ダイアログ（削除確認・競合通知の共通部品） ============ -->
+<div class="modal-overlay" id="confirmOverlay" style="align-items:center;">
+  <div class="modal-sheet" style="border-radius:18px; max-width:400px; margin:0 16px; animation:none;">
+    <div class="modal-header" style="margin-top:6px;">
+      <h2 id="confirmTitle">確認</h2>
+    </div>
+    <p id="confirmMessage" style="font-size:14px; color:var(--ink-soft); line-height:1.65; margin:0 0 18px; white-space:pre-line;"></p>
+    <div class="modal-actions" style="margin-top:0;">
+      <button type="button" class="btn-secondary" id="confirmCancelBtn">キャンセル</button>
+      <button type="button" class="submit" id="confirmOkBtn" style="flex:1; margin:0;">
+        <span class="label" id="confirmOkLabel">OK</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // ここに、Google Apps Script を「ウェブアプリ」としてデプロイした
+  // 際に発行される URL を貼り付けてください（README.md 参照）
+  // 例: https://script.google.com/macros/s/XXXXXXXX/exec
+  // ============================================================
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkTNbMt1f77VwSouloITM4mWcCdUf_kZI7B81kyGUd2_DMCVK68P37mxqkkZkIXotZ/exec";
+
+  const dateInput = document.getElementById('date');
+  const todayLabel = document.getElementById('todayLabel');
+
+  // 日本時間（JST）の今日の日付を取得
+  const now = new Date();
+  const todayISO = new Intl.DateTimeFormat('ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).formatToParts(now).reduce((obj, part) => {
+    if (part.type !== 'literal') obj[part.type] = part.value;
+    return obj;
+  }, {});
+
+  const today = `${todayISO.year}-${todayISO.month}-${todayISO.day}`;
+
+  // 「報告日」に今日の日付を自動入力
+  dateInput.value = today;
+
+  // ヘッダーにも今日の日付を表示
+  todayLabel.textContent = new Intl.DateTimeFormat('ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'short'
+  }).format(now);
+
+  if(!APPS_SCRIPT_URL){
+    document.getElementById('configWarning').style.display = 'block';
+  }
+
+  // ---------------- タブ切り替え ----------------
+  let historyLoaded = false;
+  function switchView(name){
+    const isCreate = name === 'create';
+    document.getElementById('createView').classList.toggle('active', isCreate);
+    document.getElementById('historyView').classList.toggle('active', !isCreate);
+    document.getElementById('tabCreateBtn').classList.toggle('active', isCreate);
+    document.getElementById('tabHistoryBtn').classList.toggle('active', !isCreate);
+    document.getElementById('submitBar').style.display = isCreate ? 'block' : 'none';
+    document.body.style.paddingBottom = isCreate ? '110px' : '24px';
+    if(!isCreate && !historyLoaded){
+      loadHistory();
+    }
+  }
+
+  // ---------------- 音声入力（共通化） ----------------
+  const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  function setupMic(btn){
+    const targetId = btn.getAttribute('data-mic-target');
+    const field = document.getElementById(targetId);
+    const label = btn.querySelector('.mic-label');
+    const fallback = btn.closest('.field').querySelector('[data-mic-fallback]');
+
+    if(!SpeechRecognitionCtor){
+      btn.style.display = 'none';
+      if(fallback) fallback.textContent = 'このブラウザは音声入力ボタンに対応していません。入力欄をタップし、画面キーボードのマイクアイコンから音声入力をご利用ください。';
+      return;
+    }
+
+    const recognition = new SpeechRecognitionCtor();
+    recognition.lang = 'ja-JP';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    let listening = false;
+    let baseText = '';
+
+    recognition.onresult = (e) => {
+      let interim = '';
+      let finalTranscript = '';
+      for(let i=0; i<e.results.length; i++){
+        if(e.results[i].isFinal){
+          finalTranscript += e.results[i][0].transcript;
+        } else {
+          interim += e.results[i][0].transcript;
+        }
+      }
+      field.value = (baseText + finalTranscript + interim).trim();
+    };
+    recognition.onend = () => {
+      listening = false;
+      btn.classList.remove('recording');
+      label.textContent = '音声入力';
+      baseText = field.value ? field.value + '\n' : '';
+    };
+    recognition.onerror = () => {
+      listening = false;
+      btn.classList.remove('recording');
+      label.textContent = '音声入力';
+    };
+
+    btn.addEventListener('click', () => {
+      if(listening){
+        recognition.stop();
+      } else {
+        baseText = field.value ? field.value + '\n' : '';
+        recognition.start();
+        listening = true;
+        btn.classList.add('recording');
+        label.textContent = '停止（話しています）';
+      }
+    });
+  }
+  document.querySelectorAll('.mic-btn').forEach(setupMic);
+
+  // ---------------- 添付ファイル（共通化・最大3件） ----------------
+  const MAX_FILE_BYTES = 10 * 1024 * 1024; // 1点あたり10MB
+  const MAX_ATTACHMENTS = 3;
+
+  function fileToBase64(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // data:application/pdf;base64,XXXX... の "XXXX..." 部分のみ取り出す
+        const result = reader.result || '';
+        const idx = result.indexOf(',');
+        resolve(idx >= 0 ? result.slice(idx + 1) : result);
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function fileIconSvg(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+  }
+
+  // 添付ファイル欄の管理（新規報告・編集モーダルの両方で共有）。
+  // スロットは最大MAX_ATTACHMENTS件。各要素は
+  //   {type:'existing', url, name} … 既存の添付（保存済み）
+  //   {type:'new', file}           … これから送信する新しいファイル
+  // のいずれか。
+  function createAttachmentManager({ listId, inputId, dropId, dropLabelId, hintId }){
+    const listEl = document.getElementById(listId);
+    const input = document.getElementById(inputId);
+    const drop = document.getElementById(dropId);
+    const dropLabel = document.getElementById(dropLabelId);
+    const hintEl = hintId ? document.getElementById(hintId) : null;
+    const defaultHint = hintEl ? hintEl.textContent : '';
+
+    let slots = [];
+
+    function render(){
+      listEl.innerHTML = slots.map((s, i) => {
+        const name = s.type === 'existing' ? (s.name || '添付ファイル') : s.file.name;
+        const openAttr = s.type === 'existing' && s.url
+          ? ' data-open="' + i + '"'
+          : '';
+        const nameHtml = s.type === 'existing' && s.url
+          ? '<span class="file-chip-name" style="text-decoration:underline; cursor:pointer;"' + openAttr + '>' + escapeHtml(name) + '</span>'
+          : '<span class="file-chip-name">' + escapeHtml(name) + '</span>';
+        return '<div class="file-chip">' + fileIconSvg() + nameHtml
+          + '<button type="button" class="file-chip-remove" data-remove="' + i + '" aria-label="削除">✕</button></div>';
+      }).join('');
+
+      listEl.querySelectorAll('[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          slots.splice(Number(btn.getAttribute('data-remove')), 1);
+          render();
+        });
+      });
+      listEl.querySelectorAll('[data-open]').forEach(el => {
+        el.addEventListener('click', () => {
+          const s = slots[Number(el.getAttribute('data-open'))];
+          if(s && s.url) window.open(s.url, '_blank', 'noopener');
+        });
+      });
+
+      const full = slots.length >= MAX_ATTACHMENTS;
+      drop.style.display = full ? 'none' : 'flex';
+      if(hintEl){
+        hintEl.textContent = full ? ('上限（' + MAX_ATTACHMENTS + '点）まで添付しています。') : defaultHint;
+      }
+    }
+
+    function addFile(file){
+      if(slots.length >= MAX_ATTACHMENTS){
+        showToast('添付できるのは最大' + MAX_ATTACHMENTS + '点までです。', true);
+        return;
+      }
+      if(file.size > MAX_FILE_BYTES){
+        showToast('添付ファイルが大きすぎます（1点10MBまで）。', true);
+        return;
+      }
+      slots.push({ type: 'new', file: file });
+      render();
+    }
+
+    drop.addEventListener('click', () => input.click());
+    input.addEventListener('change', () => {
+      const file = input.files && input.files[0];
+      input.value = '';
+      if(file) addFile(file);
+    });
+    ['dragover','dragenter'].forEach(evt => drop.addEventListener(evt, (e) => {
+      e.preventDefault();
+      drop.classList.add('drag-over');
+    }));
+    ['dragleave','drop'].forEach(evt => drop.addEventListener(evt, (e) => {
+      e.preventDefault();
+      drop.classList.remove('drag-over');
+    }));
+    drop.addEventListener('drop', (e) => {
+      const file = e.dataTransfer.files && e.dataTransfer.files[0];
+      if(file) addFile(file);
+    });
+
+    return {
+      reset(){ slots = []; render(); },
+      setExisting(attachments){
+        slots = (attachments || []).slice(0, MAX_ATTACHMENTS).map(a => ({ type: 'existing', url: a.url, name: a.name }));
+        render();
+      },
+      isEmpty(){ return slots.length === 0; },
+      // 新規報告用: base64エンコード済みファイル配列を返す
+      async buildFilesPayload(){
+        const files = [];
+        for(const s of slots){
+          if(s.type === 'new'){
+            files.push({
+              fileName: s.file.name,
+              fileType: s.file.type || 'application/pdf',
+              fileData: await fileToBase64(s.file)
+            });
+          }
+        }
+        return files;
+      },
+      // 編集用: サーバーに送るスロット配列（既存維持/新規差替）を返す
+      async buildSlotsPayload(){
+        const result = [];
+        for(const s of slots){
+          if(s.type === 'existing'){
+            result.push({ keepUrl: s.url, keepName: s.name });
+          } else {
+            result.push({
+              fileName: s.file.name,
+              fileType: s.file.type || 'application/pdf',
+              fileData: await fileToBase64(s.file)
+            });
+          }
+        }
+        return result;
+      }
+    };
+  }
+
+  const newReportAttachments = createAttachmentManager({
+    listId: 'fileAttachList', inputId: 'file', dropId: 'fileDrop',
+    dropLabelId: 'fileDropLabel', hintId: 'fileDropHint'
+  });
+
+  const editAttachments = createAttachmentManager({
+    listId: 'editFileAttachList', inputId: 'editFile', dropId: 'editFileDrop',
+    dropLabelId: 'editFileDropLabel', hintId: 'editAttachmentHint'
+  });
+
+  // ---------------- 関連する過去の報告（検索して選択） ----------------
+  function relationIconSvg(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+  }
+
+  function createRelatedPicker({ selectedId, searchAreaId, inputId, btnId, resultsId }){
+    const selectedEl = document.getElementById(selectedId);
+    const searchArea = document.getElementById(searchAreaId);
+    const input = document.getElementById(inputId);
+    const btn = document.getElementById(btnId);
+    const resultsEl = document.getElementById(resultsId);
+
+    let selected = null; // { reportId, summary }
+
+    function renderSelected(){
+      if(!selected){
+        selectedEl.style.display = 'none';
+        selectedEl.innerHTML = '';
+        searchArea.style.display = 'block';
+        return;
+      }
+      searchArea.style.display = 'none';
+      selectedEl.style.display = 'flex';
+      selectedEl.className = 'related-selected-chip';
+      // 報告ID（reportId）は、この機能が無かった頃に作られた古い報告に
+      // 関連付けた場合など、空になっていることがある。その場合も概要
+      // テキスト自体は表示し、「元の報告を開く」（ジャンプ）だけを
+      // 無効化する（表示ごと消えてしまわないようにするため）。
+      const openBtnHtml = selected.reportId
+        ? '<button type="button" class="r-open" data-open-related>元の報告を開く</button>'
+        : '<span class="r-open" style="text-decoration:none; cursor:default; opacity:0.7;">リンク情報が無いため開けません</span>';
+      selectedEl.innerHTML = relationIconSvg()
+        + '<div class="r-body"><div class="r-company">' + escapeHtml(selected.summary || '関連付け済み') + '</div>'
+        + openBtnHtml + '</div>'
+        + '<button type="button" class="file-chip-remove" data-clear-related aria-label="関連付けを解除">✕</button>';
+
+      selectedEl.querySelector('[data-clear-related]').addEventListener('click', () => {
+        selected = null;
+        renderSelected();
+      });
+      const openBtn = selectedEl.querySelector('[data-open-related]');
+      if(openBtn){
+        openBtn.addEventListener('click', () => {
+          openRelatedPreview(selected.reportId);
+        });
+      }
+    }
+
+    async function doSearch(){
+      const q = input.value.trim();
+      if(!q){ resultsEl.innerHTML = ''; return; }
+      resultsEl.innerHTML = '<div class="related-empty">検索中…</div>';
+      try{
+        const res = await fetch(APPS_SCRIPT_URL + '?action=search&q=' + encodeURIComponent(q));
+        const data = await res.json();
+        if(data.status !== 'success'){
+          resultsEl.innerHTML = '<div class="related-empty">' + escapeHtml(data.message || '検索に失敗しました。') + '</div>';
+          return;
+        }
+        if(!data.rows.length){
+          resultsEl.innerHTML = '<div class="related-empty">該当する報告が見つかりませんでした。</div>';
+          return;
+        }
+        resultsEl.innerHTML = '<div class="related-result-list">' + data.rows.map((r, i) => {
+          const office = r.officeName ? '・' + escapeHtml(r.officeName) : '';
+          return '<div class="related-result-item" data-idx="' + i + '">'
+            + '<div class="r-date">' + escapeHtml(r.date) + '　' + escapeHtml(r.reporter || '') + '</div>'
+            + '<div class="r-company">' + escapeHtml(r.companyName || '') + office + '</div>'
+            + '<div class="r-content">' + escapeHtml(r.content || '') + '</div>'
+            + '</div>';
+        }).join('') + '</div>';
+
+        resultsEl.querySelectorAll('[data-idx]').forEach(el => {
+          el.addEventListener('click', () => {
+            const r = data.rows[Number(el.getAttribute('data-idx'))];
+            if(!r.reportId){
+              showToast('この報告は現在のバージョンのデータ形式に未対応のため、関連付けできません。Code.gsが最新版か確認してください。', true);
+              return;
+            }
+            const office = r.officeName ? '・' + r.officeName : '';
+            selected = {
+              reportId: r.reportId,
+              summary: r.date + '　' + r.companyName + office
+            };
+            input.value = '';
+            resultsEl.innerHTML = '';
+            renderSelected();
+          });
+        });
+      }catch(e){
+        resultsEl.innerHTML = '<div class="related-empty">通信エラーが発生しました。</div>';
+      }
+    }
+
+    btn.addEventListener('click', doSearch);
+    input.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){ e.preventDefault(); doSearch(); }
+    });
+
+    return {
+      reset(){ selected = null; input.value = ''; resultsEl.innerHTML = ''; renderSelected(); },
+      setFromSummary(reportId, summary){
+        selected = reportId ? { reportId: reportId, summary: summary || '関連付け済み' } : null;
+        input.value = '';
+        resultsEl.innerHTML = '';
+        renderSelected();
+      },
+      getPayload(){
+        return selected
+          ? { relatedReportId: selected.reportId, relatedReportSummary: selected.summary }
+          : { relatedReportId: '', relatedReportSummary: '' };
+      }
+    };
+  }
+
+  const newReportRelated = createRelatedPicker({
+    selectedId: 'relatedSelected', searchAreaId: 'relatedSearchArea',
+    inputId: 'relatedSearchInput', btnId: 'relatedSearchBtn', resultsId: 'relatedSearchResults'
+  });
+
+  const editRelated = createRelatedPicker({
+    selectedId: 'editRelatedSelected', searchAreaId: 'editRelatedSearchArea',
+    inputId: 'editRelatedSearchInput', btnId: 'editRelatedSearchBtn', resultsId: 'editRelatedSearchResults'
+  });
+
+  // ---------------- 関連する報告のプレビュー表示 ----------------
+  const relatedPreviewOverlay = document.getElementById('relatedPreviewOverlay');
+  const relatedPreviewBody = document.getElementById('relatedPreviewBody');
+  const relatedPreviewEditBtn = document.getElementById('relatedPreviewEditBtn');
+  let relatedPreviewData = null;
+
+  async function openRelatedPreview(reportId){
+    if(!APPS_SCRIPT_URL) return;
+    if(!reportId){
+      // relatedReportSummary はあるが relatedReportId が空という、
+      // 古いデータ形式で稀に起こりうる状態。ここでサイレントに何もしないと
+      // 「タップしても反応がない＝リンク先が消えた」ように見えてしまうため、
+      // 必ず分かりやすい案内を出す。
+      relatedPreviewData = null;
+      relatedPreviewEditBtn.style.display = 'none';
+      relatedPreviewBody.innerHTML = '<div class="related-empty">このリンク先は開けません。お手数ですが、編集画面で一度関連付けを解除し、あらためて検索して選び直してください。</div>';
+      relatedPreviewOverlay.classList.add('show');
+      return;
+    }
+    relatedPreviewBody.innerHTML = '<div class="related-empty">読み込み中…</div>';
+    relatedPreviewOverlay.classList.add('show');
+    relatedPreviewData = null;
+    try{
+      const res = await fetch(APPS_SCRIPT_URL + '?action=findById&id=' + encodeURIComponent(reportId));
+      const data = await res.json();
+      if(data.status !== 'success'){
+        relatedPreviewBody.innerHTML = '<div class="related-empty">' + escapeHtml(data.message || 'この報告は見つかりませんでした。') + '</div>';
+        relatedPreviewEditBtn.style.display = 'none';
+        return;
+      }
+      relatedPreviewData = data.row;
+      relatedPreviewEditBtn.style.display = 'block';
+      const r = data.row;
+      const office = r.officeName ? '・' + escapeHtml(r.officeName) : '';
+      const attachmentsHtml = (r.attachments || []).map(a =>
+        '<a class="attachment-badge" href="' + escapeHtml(a.url) + '" target="_blank" rel="noopener" style="margin-right:6px;">'
+        + fileIconSvg() + escapeHtml(a.name || '資料') + '</a>'
+      ).join('');
+      relatedPreviewBody.innerHTML =
+        '<div class="card" style="margin-bottom:0;">'
+        + '<p style="font-size:12px; font-weight:700; color:var(--navy);">' + escapeHtml(r.date) + '</p>'
+        + '<p style="font-size:15px; font-weight:700; margin:2px 0;">' + escapeHtml(r.companyName || '') + office + '</p>'
+        + '<p style="font-size:12px; color:var(--ink-soft); margin:0 0 10px;">' + escapeHtml(r.reporter || '') + ' ／ ' + escapeHtml(r.customerType || '') + ' ／ ' + escapeHtml(r.method || '') + '</p>'
+        + '<p style="font-size:13.5px; white-space:pre-wrap; word-break:break-word;">' + linkifyText(r.content || '') + '</p>'
+        + (attachmentsHtml ? '<div style="margin-top:10px;">' + attachmentsHtml + '</div>' : '')
+        + '</div>';
+    }catch(e){
+      relatedPreviewBody.innerHTML = '<div class="related-empty">通信エラーが発生しました。</div>';
+      relatedPreviewEditBtn.style.display = 'none';
+    }
+  }
+  function closeRelatedPreview(){ relatedPreviewOverlay.classList.remove('show'); }
+  document.getElementById('relatedPreviewCloseBtn').addEventListener('click', closeRelatedPreview);
+  document.getElementById('relatedPreviewCloseBtn2').addEventListener('click', closeRelatedPreview);
+  relatedPreviewOverlay.addEventListener('click', (e) => { if(e.target === relatedPreviewOverlay) closeRelatedPreview(); });
+  relatedPreviewEditBtn.addEventListener('click', () => {
+    if(!relatedPreviewData) return;
+    closeRelatedPreview();
+    closeEdit();
+    openEditWithData(relatedPreviewData);
+  });
+
+  // ---------------- トースト ----------------
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  function showToast(msg, isError){
+    clearTimeout(toastTimer);
+    toast.textContent = msg;
+    toast.classList.toggle('error', !!isError);
+    toast.classList.add('show');
+    toastTimer = setTimeout(()=> toast.classList.remove('show'), 3200);
+  }
+
+  // ---------------- 新規報告：送信処理 ----------------
+  const form = document.getElementById('reportForm');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if(!APPS_SCRIPT_URL){ showToast('送信先が未設定です。設定を確認してください。', true); return; }
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+
+    const payload = {
+      action: 'create',
+      date: dateInput.value,
+      reporter: document.getElementById('reporter').value.trim(),
+      customerType: document.getElementById('customerType').value,
+      companyName: document.getElementById('companyName').value.trim(),
+      officeName: document.getElementById('officeName').value.trim(),
+      contactPerson: document.getElementById('contactPerson').value.trim(),
+      method: document.getElementById('method').value,
+      content: document.getElementById('content').value.trim()
+    };
+    Object.assign(payload, newReportRelated.getPayload());
+
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    try{
+      try{
+        payload.files = await newReportAttachments.buildFilesPayload();
+      }catch(fileReadErr){
+        showToast('添付ファイルの読み込みに失敗しました：' + (fileReadErr && fileReadErr.message ? fileReadErr.message : fileReadErr), true);
+        return;
+      }
+
+      const data = await sendToScript(payload);
+      if(data.status === 'success'){
+        showToast('報告を送信しました。');
+        const keepReporter = payload.reporter;
+        form.reset();
+        dateInput.value = today;
+        document.getElementById('reporter').value = keepReporter;
+        newReportAttachments.reset();
+        newReportRelated.reset();
+        historyLoaded = false; // 次回履歴を開いたときに最新化
+      } else {
+        // サーバーから返ってきた具体的な理由をそのまま表示する
+        // （汎用メッセージで上書きしてしまうと原因が分からなくなるため）
+        showToast(data.message || '送信に失敗しました。もう一度お試しください。', true);
+      }
+    }catch(err){
+      showToast('通信エラーが発生しました：' + (err && err.message ? err.message : '電波状況をご確認ください。'), true);
+    }finally{
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }
+  });
+
+  // Apps Scriptへ送信し、レスポンスのJSONをそのまま返す
+  // （成功/失敗の判定とメッセージ表示は呼び出し元に委ねる）
+  async function sendToScript(payload){
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    let data;
+    try{
+      data = await res.json();
+    }catch(parseErr){
+      // JSONとして解釈できないレスポンス（Apps Script側の想定外エラー等）
+      throw new Error('サーバーからの応答を解釈できませんでした（HTTP ' + res.status + '）。');
+    }
+    return data;
+  }
+
+  // ---------------- 履歴・検索 ----------------
+  let allReports = [];
+  const historyList = document.getElementById('historyList');
+  const resultCountWrap = document.getElementById('resultCountWrap');
+  const resultCountLabel = document.getElementById('resultCountLabel');
+
+  const qInput = document.getElementById('q');
+  const fReporter = document.getElementById('fReporter');
+  const fCustomerType = document.getElementById('fCustomerType');
+  const fMethod = document.getElementById('fMethod');
+  const fFrom = document.getElementById('fFrom');
+  const fTo = document.getElementById('fTo');
+
+  document.getElementById('refreshBtn').addEventListener('click', () => loadHistory(true));
+  document.getElementById('clearFilterBtn').addEventListener('click', () => {
+    qInput.value = ''; fReporter.value = ''; fCustomerType.value = '';
+    fMethod.value = ''; fFrom.value = ''; fTo.value = '';
+    renderHistory();
+  });
+  [qInput, fReporter, fCustomerType, fMethod, fFrom, fTo].forEach(el => {
+    el.addEventListener('input', renderHistory);
+    el.addEventListener('change', renderHistory);
+  });
+
+  async function loadHistory(forceReload){
+    if(!APPS_SCRIPT_URL){
+      historyList.innerHTML = '';
+      resultCountWrap.style.display = 'none';
+      return;
+    }
+    historyList.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+    resultCountWrap.style.display = 'none';
+    try{
+      const res = await fetch(APPS_SCRIPT_URL + '?action=list');
+      const data = await res.json();
+      if(data.status === 'success'){
+        allReports = data.rows || [];
+        historyLoaded = true;
+        renderHistory();
+      } else {
+        historyList.innerHTML = emptyStateHtml('⚠️', data.message || '取得に失敗しました。');
+      }
+    }catch(err){
+      historyList.innerHTML = emptyStateHtml('📡', '通信エラーが発生しました。電波状況をご確認のうえ、「最新の状態に更新」をお試しください。');
+    }
+  }
+
+  function renderHistory(){
+    const q = qInput.value.trim().toLowerCase();
+    const rep = fReporter.value.trim().toLowerCase();
+    const ct = fCustomerType.value;
+    const method = fMethod.value;
+    const from = fFrom.value;
+    const to = fTo.value;
+
+    const filtered = allReports.filter(r => {
+      if(rep && !(r.reporter||'').toLowerCase().includes(rep)) return false;
+      if(ct && r.customerType !== ct) return false;
+      if(method && r.method !== method) return false;
+      if(from && r.date < from) return false;
+      if(to && r.date > to) return false;
+      if(q){
+        const hay = [r.companyName, r.officeName, r.contactPerson, r.content, r.reporter].join(' ').toLowerCase();
+        if(!hay.includes(q)) return false;
+      }
+      return true;
+    }).sort((a, b) => {
+    // 報告日：新しい順
+    return String(b.date || '').localeCompare(String(a.date || ''));
+    });
+
+    if(allReports.length === 0){
+      historyList.innerHTML = emptyStateHtml('🗒️', 'まだ報告がありません。「新規報告」から最初の報告を送信してみましょう。');
+      resultCountWrap.style.display = 'none';
+      return;
+    }
+    if(filtered.length === 0){
+      historyList.innerHTML = emptyStateHtml('🔍', '該当する報告が見つかりませんでした。条件を変えてお試しください。');
+      resultCountWrap.style.display = 'flex';
+      resultCountLabel.textContent = '0 件 / 全 ' + allReports.length + ' 件';
+      return;
+    }
+
+    resultCountWrap.style.display = 'flex';
+    resultCountLabel.textContent = filtered.length + ' 件 / 全 ' + allReports.length + ' 件';
+
+    historyList.innerHTML = filtered.map(r => {
+      const office = r.officeName ? '・' + escapeHtml(r.officeName) : '';
+      const contact = r.contactPerson ? ' ／ ' + escapeHtml(r.contactPerson) : '';
+      const attachments = r.attachments || [];
+
+      let attachment = '';
+      if(attachments.length === 1){
+        attachment = '<a class="attachment-badge" href="' + escapeHtml(attachments[0].url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">'
+          + fileIconSvg() + '資料を見る</a>';
+      } else if(attachments.length > 1){
+        attachment = '<span class="attachment-badge" onclick="event.stopPropagation(); openEdit(' + r.rowNumber + ')" style="cursor:pointer;">'
+          + fileIconSvg() + '資料 ' + attachments.length + '件</span>';
+      }
+
+      const relation = r.relatedReportSummary
+        ? '<button type="button" class="relation-line" onclick="event.stopPropagation(); openRelatedPreview(\'' + String(r.relatedReportId).replace(/'/g, "\\'") + '\')">'
+          + relationIconSvg() + '関連: ' + escapeHtml(r.relatedReportSummary) + '</button>'
+        : '';
+
+      return '<div class="report-item" onclick="openEdit(' + r.rowNumber + ')">'
+        + '<div class="row1">'
+        + '<span class="date">' + escapeHtml(r.date) + '</span>'
+        + '<span style="display:flex; align-items:center; gap:6px;">' + attachment + '<span class="badge">' + escapeHtml(r.method || '') + '</span></span>'
+        + '</div>'
+        + '<p class="company">' + escapeHtml(r.companyName || '') + office + '</p>'
+        + '<p class="meta">' + escapeHtml(r.reporter || '') + ' ／ ' + escapeHtml(r.customerType || '') + contact + '</p>'
+        + relation
+        + '<p class="content-preview">' + linkifyText(r.content || '') + '</p>'
+        + '</div>';
+    }).join('');
+  }
+
+  function emptyStateHtml(emoji, msg){
+    return '<div class="empty-state"><div class="big">' + emoji + '</div><p>' + escapeHtml(msg) + '</p></div>';
+  }
+  function escapeHtml(str){
+    return String(str == null ? '' : str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // テキスト中のURL（http/https）をクリック可能なリンクに変換する。
+  // 先にHTMLエスケープしてからURLパターンを置換するため安全。
+  // 日本語の文章でよくある「。」「、」等がURL直後に続く場合は、
+  // リンクの外側に出るようにしている（例: 「詳細はhttps://a.jp。」）。
+  function linkifyText(str){
+    const escaped = escapeHtml(str);
+    return escaped.replace(/https?:\/\/[^\s<]+/g, function(url){
+      const trailChars = ['。','、','，','．',',','.','」','』','】',')',']','>',';',':','!','！','?','？'];
+      let trail = '';
+      while(url.length > 0 && trailChars.indexOf(url.slice(-1)) !== -1){
+        trail = url.slice(-1) + trail;
+        url = url.slice(0, -1);
+      }
+      if(!url) return trail;
+      return '<a href="' + url + '" target="_blank" rel="noopener" class="content-link" onclick="event.stopPropagation()">' + url + '</a>' + trail;
+    });
+  }
+
+  // ---------------- 確認ダイアログ（Promiseベース共通部品） ----------------
+  const confirmOverlay = document.getElementById('confirmOverlay');
+  const confirmTitle = document.getElementById('confirmTitle');
+  const confirmMessage = document.getElementById('confirmMessage');
+  const confirmOkBtn = document.getElementById('confirmOkBtn');
+  const confirmOkLabel = document.getElementById('confirmOkLabel');
+  const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+
+  function showConfirm(opts){
+    return new Promise((resolve) => {
+      confirmTitle.textContent = opts.title || '確認';
+      confirmMessage.textContent = opts.message || '';
+      confirmOkLabel.textContent = opts.okLabel || 'OK';
+      confirmOkBtn.style.background = opts.danger ? 'var(--danger)' : 'var(--navy)';
+      confirmCancelBtn.style.display = opts.hideCancel ? 'none' : 'block';
+
+      confirmOverlay.classList.add('show');
+
+      function cleanup(result){
+        confirmOverlay.classList.remove('show');
+        confirmOkBtn.removeEventListener('click', onOk);
+        confirmCancelBtn.removeEventListener('click', onCancel);
+        resolve(result);
+      }
+      function onOk(){ cleanup(true); }
+      function onCancel(){ cleanup(false); }
+      confirmOkBtn.addEventListener('click', onOk);
+      confirmCancelBtn.addEventListener('click', onCancel);
+    });
+  }
+
+  // ---------------- 編集モーダル ----------------
+  const editOverlay = document.getElementById('editOverlay');
+  const editForm = document.getElementById('editForm');
+  const editSubmitBtn = document.getElementById('editSubmitBtn');
+  const editDeleteBtn = document.getElementById('editDeleteBtn');
+
+  // 編集を開始した時点のスナップショット（競合検知に使用）
+  let currentEditOriginal = null;
+
+  function fillEditForm(r){
+    document.getElementById('editRowNumber').value = r.rowNumber || '';
+    document.getElementById('editDate').value = r.date || '';
+    document.getElementById('editReporter').value = r.reporter || '';
+    document.getElementById('editCustomerType').value = r.customerType || '';
+    document.getElementById('editCompanyName').value = r.companyName || '';
+    document.getElementById('editOfficeName').value = r.officeName || '';
+    document.getElementById('editContactPerson').value = r.contactPerson || '';
+    document.getElementById('editMethod').value = r.method || '';
+    document.getElementById('editContent').value = r.content || '';
+    currentEditOriginal = {
+      date: r.date || '', reporter: r.reporter || '', customerType: r.customerType || '',
+      companyName: r.companyName || '', officeName: r.officeName || '',
+      contactPerson: r.contactPerson || '', method: r.method || '', content: r.content || '',
+      attachment1Url: r.attachment1Url || '', attachment1Name: r.attachment1Name || '',
+      attachment2Url: r.attachment2Url || '', attachment2Name: r.attachment2Name || '',
+      attachment3Url: r.attachment3Url || '', attachment3Name: r.attachment3Name || '',
+      relatedReportId: r.relatedReportId || '', relatedReportSummary: r.relatedReportSummary || ''
+    };
+
+    editAttachments.setExisting(r.attachments || []);
+    editRelated.setFromSummary(r.relatedReportId || '', r.relatedReportSummary || '');
+  }
+
+  // rowNumber（現在の履歴一覧に読み込み済みのデータ）から編集画面を開く
+  window.openEdit = function(rowNumber){
+    const r = allReports.find(x => x.rowNumber === rowNumber);
+    if(!r) return;
+    fillEditForm(r);
+    editOverlay.classList.add('show');
+  };
+
+  // findById等で取得した、一覧に無いデータからも編集画面を開けるようにする
+  function openEditWithData(r){
+    fillEditForm(r);
+    editOverlay.classList.add('show');
+  }
+
+  function closeEdit(){ editOverlay.classList.remove('show'); }
+  document.getElementById('editCloseBtn').addEventListener('click', closeEdit);
+  document.getElementById('editCancelBtn').addEventListener('click', closeEdit);
+  editOverlay.addEventListener('click', (e) => { if(e.target === editOverlay) closeEdit(); });
+
+  function currentEditRowNumber(){
+    return Number(document.getElementById('editRowNumber').value);
+  }
+
+  // action:'update' もしくは 'delete' を、スナップショット付きで送信し、
+  // 成功／競合／削除済み／エラーを判定する
+  async function sendWithConflictCheck(payload){
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => null);
+    if(!data) return { status: 'error', message: '通信エラーが発生しました。' };
+    return data;
+  }
+
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if(!APPS_SCRIPT_URL){ showToast('送信先が未設定です。設定を確認してください。', true); return; }
+    if(!editForm.checkValidity()){ editForm.reportValidity(); return; }
+
+    const payload = {
+      action: 'update',
+      rowNumber: currentEditRowNumber(),
+      original: currentEditOriginal,
+      date: document.getElementById('editDate').value,
+      reporter: document.getElementById('editReporter').value.trim(),
+      customerType: document.getElementById('editCustomerType').value,
+      companyName: document.getElementById('editCompanyName').value.trim(),
+      officeName: document.getElementById('editOfficeName').value.trim(),
+      contactPerson: document.getElementById('editContactPerson').value.trim(),
+      method: document.getElementById('editMethod').value,
+      content: document.getElementById('editContent').value.trim()
+    };
+    Object.assign(payload, editRelated.getPayload());
+
+    editSubmitBtn.classList.add('loading');
+    editSubmitBtn.disabled = true;
+    try{
+      try{
+        payload.attachmentSlots = await editAttachments.buildSlotsPayload();
+      }catch(fileReadErr){
+        showToast('添付ファイルの読み込みに失敗しました：' + (fileReadErr && fileReadErr.message ? fileReadErr.message : fileReadErr), true);
+        return;
+      }
+
+      const data = await sendWithConflictCheck(payload);
+
+      if(data.status === 'success'){
+        showToast('変更を保存しました。');
+        closeEdit();
+        loadHistory(true);
+
+      } else if(data.status === 'conflict'){
+        const reload = await showConfirm({
+          title: '他の人が更新しています',
+          message: (data.message || '') + '\n\n「最新の内容を読み込む」を選ぶと、入力中の内容は破棄され、最新の内容が表示されます。',
+          okLabel: '最新の内容を読み込む',
+          danger: false
+        });
+        if(reload && data.current){
+          fillEditForm(Object.assign({ rowNumber: currentEditRowNumber() }, data.current));
+          showToast('最新の内容を読み込みました。内容を確認して再度保存してください。');
+        }
+
+      } else if(data.status === 'deleted'){
+        showToast(data.message || 'この報告は既に削除されています。', true);
+        closeEdit();
+        loadHistory(true);
+
+      } else {
+        showToast(data.message || '保存に失敗しました。もう一度お試しください。', true);
+      }
+    }catch(err){
+      showToast('通信エラーが発生しました。電波状況をご確認ください。', true);
+    }finally{
+      editSubmitBtn.classList.remove('loading');
+      editSubmitBtn.disabled = false;
+    }
+  });
+
+  // ---------------- 削除 ----------------
+  editDeleteBtn.addEventListener('click', async () => {
+    if(!APPS_SCRIPT_URL){ showToast('送信先が未設定です。設定を確認してください。', true); return; }
+
+    const proceed = await showConfirm({
+      title: 'この報告を削除しますか？',
+      message: '削除すると元に戻せません。スプレッドシートの該当行が完全に削除されます。',
+      okLabel: '削除する',
+      danger: true
+    });
+    if(!proceed) return;
+
+    editDeleteBtn.disabled = true;
+    try{
+      const payload = {
+        action: 'delete',
+        rowNumber: currentEditRowNumber(),
+        original: currentEditOriginal
+      };
+      const data = await sendWithConflictCheck(payload);
+
+      if(data.status === 'success'){
+        showToast('削除しました。');
+        closeEdit();
+        loadHistory(true);
+
+      } else if(data.status === 'conflict'){
+        const reload = await showConfirm({
+          title: '他の人が更新しています',
+          message: (data.message || '') + '\n\n最新の内容を確認してから、あらためて削除してください。',
+          okLabel: '最新の内容を読み込む',
+          danger: false
+        });
+        if(reload && data.current){
+          fillEditForm(Object.assign({ rowNumber: currentEditRowNumber() }, data.current));
+          showToast('最新の内容を読み込みました。');
+        }
+
+      } else if(data.status === 'deleted'){
+        showToast(data.message || 'この報告は既に削除されています。', true);
+        closeEdit();
+        loadHistory(true);
+
+      } else {
+        showToast(data.message || '削除に失敗しました。もう一度お試しください。', true);
+      }
+    }catch(err){
+      showToast('通信エラーが発生しました。電波状況をご確認ください。', true);
+    }finally{
+      editDeleteBtn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
